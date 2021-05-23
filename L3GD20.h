@@ -25,7 +25,7 @@
 
 void GyroInit(void);
 void GyroWriteReg(uint8_t addr, uint8_t data);
-uint16_t GyroReadReg(uint8_t addr);
+uint8_t GyroReadReg(uint8_t addr);
 uint8_t SendData(uint8_t data);
 
 #endif

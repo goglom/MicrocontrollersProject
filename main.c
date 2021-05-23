@@ -4,6 +4,7 @@
 #include "ADC.h"
 #include "usart.h"
 #include "L3GD20.h"
+#include "led.h"
 
 void init(void);
 void loop(void);
@@ -12,6 +13,7 @@ void DMA1_Channel1_IRQHandler(void);
 int main(void)
 {
 	init();
+	InitLED();
 	while(1) loop();
 }
 
@@ -32,23 +34,15 @@ void init(void)
 }
 
 void loop(void)
-{    
-	//if (ADC_DMA_Ready)
-	//	ADC_Update();
+{   
+	uint8_t b = GyroReadReg(CTRL_REG1);
+	uint8_t a = GyroReadReg(WHO_AM_I);
+	if (a == 0b11010100)
+		LEDswitchLight(RED_L, 1);
+	else
+		LEDswitchLight(ALL_L, 0);
 	
-	//uint8_t data = ADC_Val * 256 / 1024;
-	//UsartTransmit(data);
-	
-	//MatrixClear();
-	//MatrixSetRow(0, data);
-	//MatrixSwapBuffers();
-	
-	GPIOE->BSRR|=GPIO_BSRR_BR_3;//включаем передачу (CS)
-	SendData(WHO_AM_I); //отправляем адрес регистра OUT_X с запросом на чтение и инкремент адреса
-	uint8_t iamwho = SendData(0x0f);//считываем данные регистра OUT_X
-	
-	GPIOE->BSRR|=GPIO_BSRR_BS_3;//выключаем передачу (CS)
-	
+	delay(1024);
 }
 
 #else

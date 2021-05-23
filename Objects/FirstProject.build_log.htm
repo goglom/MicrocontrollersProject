@@ -27,7 +27,27 @@ Project File Date:  05/23/2021
 <h2>Output:</h2>
 *** Using Compiler 'V6.15', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-".\Objects\FirstProject.axf" - 0 Error(s), 0 Warning(s).
+L3GD20.c(1): warning: In file included from...
+./L3GD20.h(31): warning: no newline at end of file [-Wnewline-eof]
+#endif
+      ^
+L3GD20.c(38): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+        uint8_t rightAddr = 0b00111111 & addr;
+                            ^
+L3GD20.c(48): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+        uint8_t rightAddr = 0b10000000;
+                            ^
+L3GD20.c(49): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+        rightAddr |= 0b00111111 & addr;
+                     ^
+L3GD20.c(71): warning: no newline at end of file [-Wnewline-eof]
+}
+ ^
+5 warnings generated.
+compiling L3GD20.c...
+linking...
+Program Size: Code=1164 RO-data=232 RW-data=4 ZI-data=1648  
+".\Objects\FirstProject.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
