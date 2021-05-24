@@ -1,5 +1,7 @@
 #include <stm32f0xx.h>
 #include <stdbool.h>
+#include <math.h>
+
 #include "Matrix.h"
 #include "ADC.h"
 #include "usart.h"
@@ -25,37 +27,47 @@ extern void delay(uint32_t ticks)
 #define TR 1
 #if TR
 
+#define DELTA_T 0.02f
+#define SCALE_CONST 0.07f  // For 2000 dps
+
 void init(void)
 {
-	//MatrixInit();
-	//ADCInit();
-	//UsartInitTransmiter();
-	
-	//InitLED();
 	GyroInit();
+	SystemCoreClockUpdate();
+	SysTick_Config(SystemCoreClock / 160000);
+}
+
+float zAngle = 0.0;
+
+bool timerFlag = false;
+
+void SysTick_Handler(void)
+{
+	timerFlag = true;
+}
+
+void GyroUpdate()
+{
+	uint8_t stat = GyroReadReg(STATUS_REG);
+	uint8_t zl = GyroReadReg(OUT_Z_L);
+	uint8_t zh = GyroReadReg(OUT_Z_H);
+	uint16_t z_raw = zl | ((uint16_t)zh << 8);
+	int16_t zVelocity = *(int16_t*)&z_raw;
+	
+	if (abs(zVelocity) < 20)
+		zVelocity = 0;
+	
+	zAngle += SCALE_CONST * zVelocity * DELTA_T;
+	
+	timerFlag = false;
 }
 
 void loop(void)
 {   
-	uint8_t stat = GyroReadReg(STATUS_REG);
-	uint8_t r1 = GyroReadReg(CTRL_REG1);
-	uint8_t r2 = GyroReadReg(CTRL_REG2);
-	uint8_t r3 = GyroReadReg(CTRL_REG3);
-	uint8_t r4 = GyroReadReg(CTRL_REG4);
-	uint8_t r5 = GyroReadReg(CTRL_REG5);
-	uint8_t xl = GyroReadReg(OUT_X_L);
-	uint8_t xh = GyroReadReg(OUT_X_H);
-	uint8_t yl = GyroReadReg(OUT_Y_L);
-	uint8_t yh = GyroReadReg(OUT_Y_H);
-	uint8_t zl = GyroReadReg(OUT_Z_L);
-	uint8_t zh = GyroReadReg(OUT_Z_H);
-	uint8_t temp = GyroReadReg(OUT_TEMP);
-	uint8_t wham = GyroReadReg(WHO_AM_I);
+	if (timerFlag)
+		GyroUpdate();
 	
-	UsartTransmit(zl);
-	UsartTransmit(zh);
-	
-	uint8_t a = wham;
+	float angle	= zAngle;
 }
 
 #else

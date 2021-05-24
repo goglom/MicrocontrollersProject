@@ -27,36 +27,70 @@ Project File Date:  05/23/2021
 <h2>Output:</h2>
 *** Using Compiler 'V6.15', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-L3GD20.c(1): warning: In file included from...
-./L3GD20.h(38): warning: no newline at end of file [-Wnewline-eof]
+main.c(6): warning: In file included from...
+./ADC.h(15): warning: no newline at end of file [-Wnewline-eof]
 #endif
       ^
-L3GD20.c(54): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
-        uint8_t rightAddr = 0b10000000;
-                            ^
-L3GD20.c(55): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
-        rightAddr |= 0b00111111 & addr;
-                     ^
-L3GD20.c(79): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
-        GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
-                                ^
-./L3GD20.h(24): note: expanded from macro 'CTRL_REG1_PD'
-#define CTRL_REG1_PD 0b00001000
-                     ^
-L3GD20.c(79): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
-        GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
-                                               ^
-./L3GD20.h(27): note: expanded from macro 'CTRL_REG1_Zen'
-#define CTRL_REG1_Zen 0b00000100
-                      ^
-L3GD20.c(80): warning: no newline at end of file [-Wnewline-eof]
-}
- ^
-6 warnings generated.
-compiling L3GD20.c...
+main.c(8): warning: In file included from...
+./L3GD20.h(41): warning: no newline at end of file [-Wnewline-eof]
+#endif
+      ^
+main.c(21): warning: no previous prototype for function 'delay' [-Wmissing-prototypes]
+extern void delay(uint32_t ticks)
+            ^
+main.c(21): note: declare 'static' if the function is not intended to be used outside of this translation unit
+extern void delay(uint32_t ticks)
+       ^
+main.c(40): warning: no previous extern declaration for non-static variable 'zAngle' [-Wmissing-variable-declarations]
+float zAngle = 0.0;
+      ^
+main.c(40): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+float zAngle = 0.0;
+^
+main.c(42): warning: no previous extern declaration for non-static variable 'timerFlag' [-Wmissing-variable-declarations]
+bool timerFlag = false;
+     ^
+main.c(42): note: declare 'static' if the variable is not intended to be used outside of this translation unit
+bool timerFlag = false;
+^
+C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h(15): note: expanded from macro 'bool'
+    #define bool _Bool
+                 ^
+main.c(44): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
+void SysTick_Handler(void)
+     ^
+main.c(44): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void SysTick_Handler(void)
+^
+static 
+main.c(54): warning: implicit conversion loses integer precision: 'int' to 'uint16_t' (aka 'unsigned short') [-Wimplicit-int-conversion]
+        uint16_t z_raw = zl | ((uint16_t)zh << 8);
+                 ~~~~~   ~~~^~~~~~~~~~~~~~~~~~~~~
+main.c(57): warning: implicitly declaring library function 'abs' with type 'int (int)' [-Wimplicit-function-declaration]
+        if (abs(zVelocity) < 20)
+            ^
+main.c(57): note: include the header <stdlib.h> or explicitly provide a declaration for 'abs'
+main.c(51): warning: unused variable 'stat' [-Wunused-variable]
+        uint8_t stat = GyroReadReg(STATUS_REG);
+                ^
+main.c(49): warning: no previous prototype for function 'GyroUpdate' [-Wmissing-prototypes]
+void GyroUpdate()
+     ^
+main.c(49): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void GyroUpdate()
+^
+static 
+main.c(49): warning: this old-style function definition is not preceded by a prototype [-Wstrict-prototypes]
+void GyroUpdate()
+               ^
+main.c(70): warning: unused variable 'angle' [-Wunused-variable]
+        float angle     = zAngle;
+              ^
+12 warnings generated.
+compiling main.c...
 linking...
-Program Size: Code=1088 RO-data=224 RW-data=4 ZI-data=1648  
-".\Objects\FirstProject.axf" - 0 Error(s), 6 Warning(s).
+Program Size: Code=2552 RO-data=240 RW-data=8 ZI-data=1656  
+".\Objects\FirstProject.axf" - 0 Error(s), 12 Warning(s).
 
 <h2>Software Packages used:</h2>
 

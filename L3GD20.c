@@ -73,7 +73,6 @@ uint8_t SendData(uint8_t data)
 void GyroInit(void)
 {
 	__SPIInit();
-	
 	GyroWriteReg(CTRL_REG4, CTRL_REG4_FS0 | CTRL_REG4_FS1);
 	GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
 }
