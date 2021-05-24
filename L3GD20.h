@@ -13,6 +13,13 @@
 #define STATUS_REG 0x27U
 #define OUT_Z_L 0x2CU
 #define OUT_Z_H 0x2DU
+#define OUT_X_L 0x28U
+#define OUT_X_H 0x29U
+#define OUT_Y_L 0x2AU
+#define OUT_Y_H 0x2BU
+#define OUT_TEMP 0x26U
+
+
 
 #define CTRL_REG1_PD 0b00001000
 #define CTRL_REG1_Xen 0b00000010

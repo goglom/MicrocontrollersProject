@@ -8,26 +8,32 @@ static void __SPIInit(void)
 	GPIOB->MODER |= GPIO_MODER_MODER13_1 | GPIO_MODER_MODER14_1 | GPIO_MODER_MODER15_1;
 	GPIOC->MODER |= GPIO_MODER_MODER0_0;
 	GPIOB->PUPDR |= GPIO_PUPDR_PUPDR13_1 | GPIO_PUPDR_PUPDR14_1 | GPIO_PUPDR_PUPDR15_1;
-	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR0_1;
+	GPIOC->PUPDR |= GPIO_PUPDR_PUPDR0_1;
+	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR8_1;
+	
+	GPIOB->OSPEEDR = 0xffffffff;
 	
 	GPIOB->AFR[1] = 0 << (15 - 8) * 4; // Clocking 
 	GPIOB->AFR[1] = 0 << (14 - 8) * 4; // (SDO) Input
 	GPIOB->AFR[1] = 0 << (13 - 8) * 4; // (SDI) Output
-	//GPIOB->AFR[1] = 0 << (12 - 8) * 4; // Ебать жмыхнуло, братан
-	
-	//GPIOB->OSPEEDR = 0xffffffff;
 	
 	SPI2->CR1 = 
 		  SPI_CR1_SSM 
 		| SPI_CR1_SSI
-		| SPI_CR1_BR_1
+		| SPI_CR1_BR
 		| SPI_CR1_MSTR
 		| SPI_CR1_CPOL
-		| SPI_CR1_CPHA;
+		| SPI_CR1_CPHA
+		;
 	
 	//SPI2->CR2 = SPI_CR2_DS;
 	//SPI2->CR2 |= SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0 ;//FIFO на 8 бит
-	SPI1->CR2 = SPI_CR2_FRXTH | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0 | SPI_CR2_FRXTH;
+	SPI2->CR2 = 
+		  SPI_CR2_DS_2 
+		| SPI_CR2_DS_1 
+		| SPI_CR2_DS_0 
+		| SPI_CR2_FRXTH
+		; 
 	
 	GPIOC->BSRR = GPIO_BSRR_BS_0;
 	SPI2->CR1 |= SPI_CR1_SPE;
@@ -35,7 +41,7 @@ static void __SPIInit(void)
 
 void GyroWriteReg(uint8_t addr, uint8_t data)
 {
-	uint8_t rightAddr = 0b00111111 & addr;
+	uint8_t rightAddr = /*0b00111111 &*/ addr;
 	
 	GPIOC->BSRR = GPIO_BSRR_BR_0;
 	SendData(rightAddr);
@@ -50,7 +56,7 @@ uint8_t GyroReadReg(uint8_t addr)
 
 	GPIOC->BSRR = GPIO_BSRR_BR_0;
 	SendData(rightAddr);
-	uint8_t res = SendData(0x00);
+	uint8_t res = SendData(0xff);
 	GPIOC->BSRR = GPIO_BSRR_BS_0;
 	
 	return res;
@@ -59,13 +65,15 @@ uint8_t GyroReadReg(uint8_t addr)
 uint8_t SendData(uint8_t data)
 {
 	while (!(SPI2->SR & SPI_SR_TXE));
-	SPI2->DR = data;
+	*(volatile uint8_t *)&SPI2->DR = data;
 	while (!(SPI2->SR & SPI_SR_RXNE));
-	return (uint8_t)SPI2->DR;
+	return *(volatile uint8_t *)&(SPI2->DR);
 }
 
 void GyroInit(void)
 {
 	__SPIInit();
-	GyroWriteReg(CTRL_REG1, 0x0F);
+	
+	GyroWriteReg(CTRL_REG4, CTRL_REG4_FS0 | CTRL_REG4_FS1);
+	GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
 }

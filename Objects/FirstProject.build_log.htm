@@ -28,26 +28,35 @@ Project File Date:  05/23/2021
 *** Using Compiler 'V6.15', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
 L3GD20.c(1): warning: In file included from...
-./L3GD20.h(31): warning: no newline at end of file [-Wnewline-eof]
+./L3GD20.h(38): warning: no newline at end of file [-Wnewline-eof]
 #endif
       ^
-L3GD20.c(38): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
-        uint8_t rightAddr = 0b00111111 & addr;
-                            ^
-L3GD20.c(48): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+L3GD20.c(54): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
         uint8_t rightAddr = 0b10000000;
                             ^
-L3GD20.c(49): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+L3GD20.c(55): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
         rightAddr |= 0b00111111 & addr;
                      ^
-L3GD20.c(71): warning: no newline at end of file [-Wnewline-eof]
+L3GD20.c(79): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+        GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
+                                ^
+./L3GD20.h(24): note: expanded from macro 'CTRL_REG1_PD'
+#define CTRL_REG1_PD 0b00001000
+                     ^
+L3GD20.c(79): warning: binary integer literals are a GNU extension [-Wgnu-binary-literal]
+        GyroWriteReg(CTRL_REG1, CTRL_REG1_PD | CTRL_REG1_Zen);
+                                               ^
+./L3GD20.h(27): note: expanded from macro 'CTRL_REG1_Zen'
+#define CTRL_REG1_Zen 0b00000100
+                      ^
+L3GD20.c(80): warning: no newline at end of file [-Wnewline-eof]
 }
  ^
-5 warnings generated.
+6 warnings generated.
 compiling L3GD20.c...
 linking...
-Program Size: Code=1164 RO-data=232 RW-data=4 ZI-data=1648  
-".\Objects\FirstProject.axf" - 0 Error(s), 5 Warning(s).
+Program Size: Code=1088 RO-data=224 RW-data=4 ZI-data=1648  
+".\Objects\FirstProject.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -75,8 +84,8 @@ Package Vendor: Keil
    * Component: Keil.Standalone::Device:Startup:1.0.0
       Source file:   MDK\Device\Source\ARM\STM32F0xx_OPT.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h
-      Source file:   Drivers\CMSIS\Device\ST\STM32F0xx\Source\Templates\arm\startup_stm32f072xb.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F0xx\Source\Templates\system_stm32f0xx.c
+      Source file:   Drivers\CMSIS\Device\ST\STM32F0xx\Source\Templates\arm\startup_stm32f072xb.s
 Build Time Elapsed:  00:00:01
 </pre>
 </body>
