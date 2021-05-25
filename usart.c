@@ -1,5 +1,7 @@
 #include "usart.h"
 
+uint8_t USART_toTransmit = 0;
+
 static void GeneralInit()
 {
 	RCC->APB1ENR|= RCC_APB1ENR_USART3EN;
@@ -9,7 +11,7 @@ static void GeneralInit()
 	GPIOC->PUPDR |= GPIO_PUPDR_PUPDR10_1 | GPIO_PUPDR_PUPDR11_1;
 	GPIOD->PUPDR |= GPIO_PUPDR_PUPDR2_1;
 	
-	// Нужно ли это???????
+	// Enable RS-485 driver
 	USART3->CR3 |= USART_CR3_DEM;
 	
 	// Set Alternate function 1 to PC10
@@ -23,13 +25,8 @@ static void GeneralInit()
 void UsartInitTransmiter(void)
 {
 	GeneralInit();
-	/* (1) Oversampling by 16, 9600 baud */
-	/* (2) 8 data bit, 1 start bit, 1 stop bit, no parity */
 	USART3->BRR = 480000 / 96; /* (1) */
 	USART3->CR1 = USART_CR1_TE | USART_CR1_UE;/* (2) */
-	//while(!(USART3->ISR & USART_ISR_TC)); // polling idle frame Transmission
-	//USART3->ICR |= USART_ICR_TCCF; // clear TC flag
-	//USART3->CR1 |= USART_CR1_RXNEIE;
 }
 
 void UsartInitReciever(void)
@@ -40,19 +37,22 @@ void UsartInitReciever(void)
 	USART3->BRR = 480000 / 96; /* (1) */
 	USART3->CR1 = USART_CR1_RE | USART_CR1_UE; /* (2) */
 }
-void UsartTransmit(uint8_t data)
+
+bool UsartTransmit(uint8_t data)
 {
-	if ((USART3->ISR & USART_ISR_TC) == USART_ISR_TC)
-	{
-		/* clear transfer complete flag and fill TDR with a new char */
-		USART3->TDR = data;
-		//USART3->ICR |= USART_ICR_TCCF;
-				
-	}
-}
-uint8_t UsartReceive(void)
-{
-	while ((USART3->ISR & USART_ISR_RXNE) != USART_ISR_RXNE);
+	if (!(USART3->ISR & USART_ISR_TXE))
+		return false;
 	
-	return (uint8_t)(USART3->RDR); /* Receive data, clear flag */
+	*(volatile uint8_t*)&(USART3->TDR) = data;
+	
+	return true;
+				
+}
+bool UsartReceive(uint8_t* data)
+{
+	if (!(USART3->ISR & USART_ISR_RXNE))
+		return false;
+	
+	*data = *(volatile uint8_t*)&(USART3->RDR);
+	return true;
 }

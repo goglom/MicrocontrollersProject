@@ -1,5 +1,6 @@
 #include "L3GD20.h"
 
+
 static void __SPIInit(void)
 {
 	RCC->AHBENR |= RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN;

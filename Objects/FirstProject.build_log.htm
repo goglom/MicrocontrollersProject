@@ -35,65 +35,77 @@ main.c(8): warning: In file included from...
 ./L3GD20.h(41): warning: no newline at end of file [-Wnewline-eof]
 #endif
       ^
-main.c(21): warning: no previous prototype for function 'delay' [-Wmissing-prototypes]
-extern void delay(uint32_t ticks)
-            ^
-main.c(21): note: declare 'static' if the function is not intended to be used outside of this translation unit
-extern void delay(uint32_t ticks)
-       ^
-main.c(41): warning: no previous extern declaration for non-static variable 'zAngle' [-Wmissing-variable-declarations]
-float zAngle = 0.0;
-      ^
-main.c(41): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-float zAngle = 0.0;
-^
-main.c(43): warning: no previous extern declaration for non-static variable 'timerFlag' [-Wmissing-variable-declarations]
-bool timerFlag = false;
+main.c(25): warning: no previous prototype for function 'setRightArrow' [-Wmissing-prototypes]
+void setRightArrow(void)
      ^
-main.c(43): note: declare 'static' if the variable is not intended to be used outside of this translation unit
-bool timerFlag = false;
+main.c(25): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setRightArrow(void)
 ^
-C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h(15): note: expanded from macro 'bool'
-    #define bool _Bool
-                 ^
-main.c(45): warning: no previous prototype for function 'SysTick_Handler' [-Wmissing-prototypes]
-void SysTick_Handler(void)
+static 
+main.c(35): warning: no previous prototype for function 'setUpRightArrow' [-Wmissing-prototypes]
+void setUpRightArrow(void)
+     ^
+main.c(35): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setUpRightArrow(void)
+^
+static 
+main.c(45): warning: no previous prototype for function 'setUpArrow' [-Wmissing-prototypes]
+void setUpArrow(void)
      ^
 main.c(45): note: declare 'static' if the function is not intended to be used outside of this translation unit
-void SysTick_Handler(void)
+void setUpArrow(void)
 ^
 static 
-main.c(55): warning: implicit conversion loses integer precision: 'int' to 'uint16_t' (aka 'unsigned short') [-Wimplicit-int-conversion]
-        uint16_t z_raw = zl | ((uint16_t)zh << 8);
-                 ~~~~~   ~~~^~~~~~~~~~~~~~~~~~~~~
-main.c(58): warning: implicitly declaring library function 'abs' with type 'int (int)' [-Wimplicit-function-declaration]
-        if (abs(zVelocity) > 50)
-            ^
-main.c(58): note: include the header <stdlib.h> or explicitly provide a declaration for 'abs'
-main.c(52): warning: unused variable 'stat' [-Wunused-variable]
-        uint8_t stat = GyroReadReg(STATUS_REG);
-                ^
-main.c(50): warning: no previous prototype for function 'GyroUpdate' [-Wmissing-prototypes]
-void GyroUpdate()
+main.c(55): warning: no previous prototype for function 'setUpLeftArrow' [-Wmissing-prototypes]
+void setUpLeftArrow(void)
      ^
-main.c(50): note: declare 'static' if the function is not intended to be used outside of this translation unit
-void GyroUpdate()
+main.c(55): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setUpLeftArrow(void)
 ^
 static 
-main.c(50): warning: this old-style function definition is not preceded by a prototype [-Wstrict-prototypes]
-void GyroUpdate()
-               ^
-main.c(69): warning: implicit conversion turns floating-point number into integer: 'float' to 'int16_t' (aka 'short') [-Wfloat-conversion]
-        int16_t angle   = zAngle * 10;
-                ~~~~~     ~~~~~~~^~~~
-main.c(70): warning: unused variable 'angleF' [-Wunused-variable]
-        float angleF = zAngle * 10;
-              ^
-13 warnings generated.
+main.c(65): warning: no previous prototype for function 'setLeftArrow' [-Wmissing-prototypes]
+void setLeftArrow(void)
+     ^
+main.c(65): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setLeftArrow(void)
+^
+static 
+main.c(75): warning: no previous prototype for function 'setDownLeftArrow' [-Wmissing-prototypes]
+void setDownLeftArrow(void)
+     ^
+main.c(75): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setDownLeftArrow(void)
+^
+static 
+main.c(85): warning: no previous prototype for function 'setDownArrow' [-Wmissing-prototypes]
+void setDownArrow(void)
+     ^
+main.c(85): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setDownArrow(void)
+^
+static 
+main.c(95): warning: no previous prototype for function 'setDownRightArrow' [-Wmissing-prototypes]
+void setDownRightArrow(void)
+     ^
+main.c(95): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setDownRightArrow(void)
+^
+static 
+main.c(116): warning: no previous prototype for function 'setSector' [-Wmissing-prototypes]
+void setSector(int sector)
+     ^
+main.c(116): note: declare 'static' if the function is not intended to be used outside of this translation unit
+void setSector(int sector)
+^
+static 
+main.c(20): warning: unused function 'delay' [-Wunused-function]
+static void delay(uint32_t ticks)
+            ^
+12 warnings generated.
 compiling main.c...
 linking...
-Program Size: Code=2960 RO-data=240 RW-data=8 ZI-data=1656  
-".\Objects\FirstProject.axf" - 0 Error(s), 13 Warning(s).
+Program Size: Code=1568 RO-data=224 RW-data=40 ZI-data=1656  
+".\Objects\FirstProject.axf" - 0 Error(s), 12 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -119,8 +131,8 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.4.0
 
    * Component: Keil.Standalone::Device:Startup:1.0.0
-      Source file:   MDK\Device\Source\ARM\STM32F0xx_OPT.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F0xx\Include\stm32f0xx.h
+      Source file:   MDK\Device\Source\ARM\STM32F0xx_OPT.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F0xx\Source\Templates\system_stm32f0xx.c
       Source file:   Drivers\CMSIS\Device\ST\STM32F0xx\Source\Templates\arm\startup_stm32f072xb.s
 Build Time Elapsed:  00:00:01
