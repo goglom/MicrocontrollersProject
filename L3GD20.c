@@ -11,11 +11,11 @@ static void __SPIInit(void)
 	GPIOC->PUPDR |= GPIO_PUPDR_PUPDR0_1;
 	GPIOA->PUPDR |= GPIO_PUPDR_PUPDR8_1;
 	
-	GPIOB->OSPEEDR = 0xffffffff;
+	//GPIOB->OSPEEDR = 0xffffffff;
 	
 	GPIOB->AFR[1] = 0 << (15 - 8) * 4; // Clocking 
-	GPIOB->AFR[1] = 0 << (14 - 8) * 4; // (SDO) Input
-	GPIOB->AFR[1] = 0 << (13 - 8) * 4; // (SDI) Output
+	GPIOB->AFR[1] = 0 << (14 - 8) * 4; // (SDO) Input for us
+	GPIOB->AFR[1] = 0 << (13 - 8) * 4; // (SDI) Output for us
 	
 	SPI2->CR1 = 
 		  SPI_CR1_SSM 
@@ -25,9 +25,6 @@ static void __SPIInit(void)
 		| SPI_CR1_CPOL
 		| SPI_CR1_CPHA
 		;
-	
-	//SPI2->CR2 = SPI_CR2_DS;
-	//SPI2->CR2 |= SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0 ;//FIFO на 8 бит
 	SPI2->CR2 = 
 		  SPI_CR2_DS_2 
 		| SPI_CR2_DS_1 
@@ -41,7 +38,7 @@ static void __SPIInit(void)
 
 void GyroWriteReg(uint8_t addr, uint8_t data)
 {
-	uint8_t rightAddr = /*0b00111111 &*/ addr;
+	uint8_t rightAddr = 0b00111111 & addr;
 	
 	GPIOC->BSRR = GPIO_BSRR_BR_0;
 	SendData(rightAddr);

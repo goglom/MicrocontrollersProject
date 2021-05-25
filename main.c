@@ -28,11 +28,12 @@ extern void delay(uint32_t ticks)
 #if TR
 
 #define DELTA_T 0.02f
-#define SCALE_CONST 0.07f  // For 2000 dps
+#define SCALE_CONST 0.0007f  // For 2000 dps
 
 void init(void)
 {
 	GyroInit();
+	UsartInitTransmiter();
 	SystemCoreClockUpdate();
 	SysTick_Config(SystemCoreClock / 160000);
 }
@@ -54,10 +55,8 @@ void GyroUpdate()
 	uint16_t z_raw = zl | ((uint16_t)zh << 8);
 	int16_t zVelocity = *(int16_t*)&z_raw;
 	
-	if (abs(zVelocity) < 20)
-		zVelocity = 0;
-	
-	zAngle += SCALE_CONST * zVelocity * DELTA_T;
+	if (abs(zVelocity) > 50)
+		zAngle += SCALE_CONST * zVelocity * DELTA_T;
 	
 	timerFlag = false;
 }
@@ -67,7 +66,18 @@ void loop(void)
 	if (timerFlag)
 		GyroUpdate();
 	
-	float angle	= zAngle;
+	int16_t angle	= zAngle * 10;
+	float angleF = zAngle * 10;
+	
+	angle %= 360;
+	
+	if (angle < 0)
+		angle = 360 + angle;
+	
+	uint8_t sector = (uint16_t)angle * 8 / 360;
+
+	
+	UsartTransmit(sector);
 }
 
 #else
@@ -80,20 +90,18 @@ void init(void)
 
 void loop(void)
 {    
-	uint8_t zh = UsartReceive();
-	uint8_t zl = UsartReceive();
-	
-	uint16_t z = zl | (uint16_t)((uint16_t)zh << 8);
-	int z_num = z * 99 / 0xffff;
+	uint8_t sector = UsartReceive();
 	
 	MatrixClear();
 	
-	DrawNum(z_num / 10, 0);
-	DrawNum(z_num % 10, 4);
+	DrawNum(sector, 0);
 	
+	if (sector > 7)
+		DrawNum(0, 4); // ERROR
 	
 	MatrixSwapBuffers();
-	
+
+	delay(1024);
 }
 
 #endif
